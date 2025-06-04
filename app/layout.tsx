@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { DM_Serif_Text, Inter, Roboto_Mono } from 'next/font/google'
 import { draftMode } from 'next/headers'
 
 import { DraftModeScript } from '@makeswift/runtime/next/server'
@@ -9,7 +9,22 @@ import { MakeswiftProvider } from '@/lib/makeswift/provider'
 
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const body = Inter({
+  display: 'swap',
+  subsets: ['latin'],
+  variable: '--font-family-body',
+})
+const heading = DM_Serif_Text({
+  display: 'swap',
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-family-heading',
+})
+const mono = Roboto_Mono({
+  display: 'swap',
+  subsets: ['latin'],
+  variable: '--font-family-mono',
+})
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -26,7 +41,7 @@ export default async function RootLayout({
       <head>
         <DraftModeScript />
       </head>
-      <body className={inter.className}>
+      <body className={`${body.variable} ${heading.variable} ${mono.variable}`}>
         <MakeswiftProvider previewMode={(await draftMode()).isEnabled}>
           {children}
         </MakeswiftProvider>
