@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { formatBlog } from '@/lib/contentful/client'
 import { getAllBlogs, getBlog } from '@/lib/contentful/fetchers'
+import { formatBlog } from '@/lib/contentful/utils'
 import { BlogPostContent } from '@/vibes/soul/sections/blog-post-content'
 
 export async function generateStaticParams() {

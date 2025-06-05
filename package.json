@@ -9,6 +9,8 @@
     "codegen-ts": "graphql-codegen --config graphql.config.ts --watch"
   },
   "dependencies": {
+    "@conform-to/react": "^1.6.1",
+    "@conform-to/zod": "^1.6.1",
     "@contentful/rich-text-html-renderer": "^17.0.0",
     "@contentful/rich-text-react-renderer": "^16.0.1",
     "@graphql-codegen/cli": "^5.0.6",

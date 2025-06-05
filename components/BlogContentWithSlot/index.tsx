@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { formatBlog } from '@/lib/contentful/client'
 import { useContentfulData } from '@/lib/contentful/provider'
+import { formatBlog } from '@/lib/contentful/utils'
 import { BlogPostContent } from '@/vibes/soul/sections/blog-post-content'
 import { SectionLayout } from '@/vibes/soul/sections/section-layout'
 
@@ -10,7 +10,7 @@ interface Props {
 }
 export default function BlogContentWithSlot({ children }: Props) {
   const { data: blogs } = useContentfulData()
-  if (!blogs || blogs.length === 0) {
+  if (!blogs || !Array.isArray(blogs) || blogs.length === 0) {
     return <div>No blog posts available</div>
   }
   const blog = blogs[0]
@@ -28,14 +28,14 @@ export default function BlogContentWithSlot({ children }: Props) {
     },
     {
       id: '3',
-      label: blog.title,
+      label: formattedBlog.title,
       href: '#',
     },
   ]
   return (
-    <>
+    <div>
       <BlogPostContent breadcrumbs={breadcrumbs} blogPost={formattedBlog} />
       <SectionLayout>{children}</SectionLayout>
-    </>
+    </div>
   )
 }

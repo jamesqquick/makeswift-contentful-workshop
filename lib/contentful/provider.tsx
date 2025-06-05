@@ -2,9 +2,9 @@
 
 import { ReactNode, createContext, useContext } from 'react'
 
-import { GetAuthorsQuery, GetBlogsQuery } from '@/generated/contentful'
+import { GetBlogsQuery } from '@/generated/contentful'
 
-type CollectionType = GetBlogsQuery['blogCollection']
+type CollectionType = GetBlogsQuery['blogPostCollection']
 
 const ContentfulContext = createContext<
   { data: CollectionType | NonNullable<CollectionType>['items'] } | undefined

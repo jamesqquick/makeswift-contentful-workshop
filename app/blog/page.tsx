@@ -1,11 +1,13 @@
-import { formatBlogs } from '@/lib/contentful/client'
 import { getAllBlogs } from '@/lib/contentful/fetchers'
+import { formatBlogs } from '@/lib/contentful/utils'
 import { BlogPostList } from '@/vibes/soul/sections/blog-post-list'
 import { SectionLayout } from '@/vibes/soul/sections/section-layout'
 
 export default async function Page() {
   const blogs = await getAllBlogs()
   const formattedBlogs = formatBlogs(blogs, false)
+  console.log('🚀 ~ Page ~ formattedBlogs:', formattedBlogs)
+
   return (
     <SectionLayout>
       <BlogPostList blogPosts={formattedBlogs} />
