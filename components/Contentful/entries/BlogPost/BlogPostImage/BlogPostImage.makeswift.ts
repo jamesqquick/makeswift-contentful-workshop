@@ -15,7 +15,7 @@ runtime.registerComponent(BlogPostImage, {
       label: 'Field',
       async getOptions(query) {
         return getFieldOptions({
-          type: 'Blog',
+          type: 'BlogPost',
           filter: name => name === 'Asset',
           query,
         })

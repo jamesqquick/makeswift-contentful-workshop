@@ -1,7 +1,7 @@
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 import { Document } from '@contentful/rich-text-types'
 
-import { Asset, BlogBodyLinks, TypeFragment, TypesDocument } from '@/generated/contentful'
+import { Asset, BlogPostBodyLinks, TypeFragment, TypesDocument } from '@/generated/contentful'
 import { client } from '@/lib/contentful/client'
 import { useContentfulData } from '@/lib/contentful/provider'
 import { BlogPost } from '@/vibes/soul/primitives/blog-post-card'
@@ -15,7 +15,7 @@ export type ResolvedField = { data: unknown } | { error: string }
 const isRichTextField = (fieldType: TypeFragment) =>
   fieldType.fields?.find(f => f.name === 'json') && fieldType.fields?.find(f => f.name === 'links')
 
-export const isRichText = (field: any): field is { json: Document; links: BlogBodyLinks } =>
+export const isRichText = (field: any): field is { json: Document; links: BlogPostBodyLinks } =>
   field?.json?.nodeType === 'document'
 
 export const isAsset = (field: any): field is Asset => {
@@ -49,7 +49,7 @@ export async function getFieldOptions({
   filter,
   query,
 }: {
-  type: 'Blog'
+  type: 'BlogPost'
   filter?: (type?: string | null) => boolean
   query: string
 }): Promise<{ id: string; label: string; value: string }[]> {
@@ -75,6 +75,7 @@ export function resolvePath<T extends string>(
 
 export function useEntryField({ fieldPath }: { fieldPath?: string }): ResolvedField {
   const { data, error } = useContentfulData()
+  console.log(data)
 
   if (error) return { error: 'No entry found.' }
 

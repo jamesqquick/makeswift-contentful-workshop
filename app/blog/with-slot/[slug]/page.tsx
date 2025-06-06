@@ -7,14 +7,13 @@ import { BLOG_CONTENT_WITH_SLOT_TYPE } from '@/components/BlogContentWithSlot/Bl
 import { getAllBlogs, getBlog } from '@/lib/contentful/fetchers'
 import { ContentfulProvider } from '@/lib/contentful/provider'
 import { client as MakeswiftClient } from '@/lib/makeswift/client'
-import { SectionLayout } from '@/vibes/soul/sections/section-layout'
 
 export async function generateStaticParams() {
   const blogs = await getAllBlogs()
   return blogs.map(blog => ({ slug: blog?.slug }))
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   if (!slug) {
     return notFound()

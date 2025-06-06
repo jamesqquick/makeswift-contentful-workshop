@@ -9,7 +9,7 @@ export async function generateStaticParams() {
   return blogs.map(blog => ({ slug: blog?.slug }))
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
   if (!slug) {
