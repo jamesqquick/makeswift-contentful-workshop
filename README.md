@@ -60,7 +60,7 @@ If you would like to add the `banner` image, you can download [this image file](
 
 For more realistic data for the `content` property, you can copy the rendered HTML from the preview section of the [Blog Post Content docs](https://vibes.site/docs/soul/blog-post-content) in VIBES. We'll talk more about VIBES later.
 
-You can also copy additional sample blog posts data from the [`Blog Post List`](https://vibes.site/docs/soul/blog-post-list) component docs.
+You can also copy additional sample blog posts data from the [`Blog Post List`](https://vibes.site/docs/soul/blog-post-list) component docs. **You'll need at least one other post to see appropriate results for a few of the sections below.**
 
 ## Local Project Setup
 
@@ -182,7 +182,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return notFound()
   }
 
-  const blog = await getBlog(slug)
+  const blog = await getBlog(slug) //TODO: update this!
 
   if (!blog) return notFound()
 
@@ -290,7 +290,7 @@ Lastly, you'll need to wrap return value with the `<ContentfulProvider>` compone
 
 ```tsx
   return (
-    <ContentfulProvider value={[blog]}>
+    <ContentfulProvider value={blog}>
       <MakeswiftComponent
         snapshot={componentSnapshot}
         label="Blog Content with Slot"

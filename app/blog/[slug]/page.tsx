@@ -1,48 +1,18 @@
 import { notFound } from 'next/navigation'
 
-import { MakeswiftComponent } from '@makeswift/runtime/next'
-import { getSiteVersion } from '@makeswift/runtime/next/server'
-
-import { BLOG_POST_EMBEDDED_COMPONENT_ID } from '@/components/BlogPostCustomizable/BlogPost.makeswift'
-import { GetBlogsDocument } from '@/generated/contentful'
-import { client } from '@/lib/contentful/client'
-import { getAllBlogs, getBlog } from '@/lib/contentful/fetchers'
-import { ContentfulProvider } from '@/lib/contentful/provider'
-import { client as MakeswiftClient } from '@/lib/makeswift/client'
+import { getBlog } from '@/lib/contentful/fetchers'
+import { formatBlog } from '@/lib/contentful/utils'
+import { BlogPostContent } from '@/vibes/soul/sections/blog-post-content'
 
 export async function generateStaticParams() {
-  const blogs = await getAllBlogs()
-  return blogs.map(blog => ({ slug: blog?.slug }))
+  //TODO: implement this function to generate static params for all blog posts
+  return []
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  if (!slug) {
-    return notFound()
-  }
+  //TODO: get slug from params
+  //TODO: fetch the blog post using the slug
+  //TODO: format the blog post
 
-  const componentSnapshot = await MakeswiftClient.getComponentSnapshot(
-    'blog-content-customizable',
-    {
-      siteVersion: await getSiteVersion(),
-    }
-  )
-
-  if (componentSnapshot == null) return notFound()
-
-  const { blogPostCollection } = await client.request(GetBlogsDocument, {
-    filter: { slug },
-  })
-
-  if (!blogPostCollection) return notFound()
-
-  return (
-    <ContentfulProvider value={blogPostCollection}>
-      <MakeswiftComponent
-        snapshot={componentSnapshot}
-        label="Blog Post Customizable"
-        type={BLOG_POST_EMBEDDED_COMPONENT_ID}
-      />
-    </ContentfulProvider>
-  )
+  return <p>TODO: display blog content</p>
 }
