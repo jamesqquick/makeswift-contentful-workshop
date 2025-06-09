@@ -34,6 +34,5 @@ export function useContentfulData() {
   if (Array.isArray(context.data)) {
     return { data: context.data }
   }
-
   return { data: context.data.items[0] }
 }

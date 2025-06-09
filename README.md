@@ -370,6 +370,8 @@ Now, each component snapshot is going to be specific to the individual page it i
 
 ## Make the Blog Content Page Fully Editable in Makeswift
 
+So far, you've learned how to integrate Contentful into Next.js and make certain parts of a page editable in Makeswift. That works for most use cases, but there is another interesting use case. What if you wanted to fully customize the template of a blog post page from within Makeswift?
+
 ```tsx
 import { notFound } from 'next/navigation'
 

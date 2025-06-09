@@ -33,7 +33,7 @@ function flattenFields(
     const newPath = [...path, field.name]
 
     fields.push({
-      label: [field.name, ...path.slice().reverse()].join(' < '),
+      label: [field.name, ...path.slice()].join(' < '),
       path: newPath.join('.'),
       type: isRichTextField(field.type) ? 'RichText' : field.type.name,
     })
@@ -54,7 +54,6 @@ export async function getFieldOptions({
   query: string
 }): Promise<{ id: string; label: string; value: string }[]> {
   const data = await client.request(TypesDocument, { name: type })
-
   if (!data.__type) return []
 
   return flattenFields(data.__type)
@@ -75,7 +74,6 @@ export function resolvePath<T extends string>(
 
 export function useEntryField({ fieldPath }: { fieldPath?: string }): ResolvedField {
   const { data, error } = useContentfulData()
-  console.log(data)
 
   if (error) return { error: 'No entry found.' }
 

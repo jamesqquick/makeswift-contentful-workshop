@@ -2,8 +2,7 @@ import clsx from 'clsx'
 import { isDevelopment } from 'utils/isDevelopment'
 
 import { Warning } from '@/components/Warning'
-
-import { ResolvedField } from '../../../../lib/contentful/utils'
+import { ResolvedField } from '@/lib/contentful/utils'
 
 type Props = {
   className?: string

@@ -2,10 +2,12 @@ import { ReactNode } from 'react'
 
 import { clsx } from 'clsx'
 
+export type ContainerSize = 'md' | 'lg' | 'xl' | '2xl' | 'full'
+
 export interface SectionLayoutProps {
   className?: string
   children: ReactNode
-  containerSize?: 'md' | 'lg' | 'xl' | '2xl' | 'full'
+  containerSize?: ContainerSize
 }
 
 /**
@@ -26,7 +28,7 @@ export function SectionLayout({ className, children, containerSize = '2xl' }: Se
     <section className={clsx('@container overflow-hidden', className)}>
       <div
         className={clsx(
-          '@xl:px-6 @xl:py-14 @4xl:px-8 @4xl:py-20 mx-auto px-4 py-10',
+          'mx-auto px-4 py-10 @xl:px-6 @xl:py-14 @4xl:px-8 @4xl:py-20',
           {
             md: 'max-w-(--section-max-width-md,768px)',
             lg: 'max-w-(--section-max-width-lg,1024px)',

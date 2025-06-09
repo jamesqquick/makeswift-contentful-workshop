@@ -12,4 +12,5 @@ runtime.registerComponent(BlogContentWithSlot, {
   props: {
     children: Slot(),
   },
+  hidden: true,
 })

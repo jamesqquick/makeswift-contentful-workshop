@@ -17,7 +17,7 @@ runtime.registerComponent(BlogPostRichText, {
       label: 'Field',
       async getOptions(query) {
         return getFieldOptions({
-          type: 'Blog',
+          type: 'BlogPost',
           filter: name => name === 'RichText',
           query,
         })

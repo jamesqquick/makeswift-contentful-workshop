@@ -30,11 +30,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   if (componentSnapshot == null) return notFound()
 
-  const blog = await getBlog(slug)
-  if (!blog) return notFound()
+  const { blogPostCollection } = await client.request(GetBlogsDocument, {
+    filter: { slug },
+  })
+
+  if (!blogPostCollection) return notFound()
 
   return (
-    <ContentfulProvider value={[blog]}>
+    <ContentfulProvider value={blogPostCollection}>
       <MakeswiftComponent
         snapshot={componentSnapshot}
         label="Blog Post Customizable"
