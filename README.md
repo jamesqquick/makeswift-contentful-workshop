@@ -60,6 +60,8 @@ If you would like to add the `banner` image, you can download [this image file](
 
 For more realistic data for the `content` property, you can copy the rendered HTML from the preview section of the [Blog Post Content docs](https://vibes.site/docs/soul/blog-post-content) in VIBES. We'll talk more about VIBES later.
 
+You can also copy additional sample blog posts data from the [`Blog Post List`](https://vibes.site/docs/soul/blog-post-list) component docs.
+
 ## Local Project Setup
 
 Start by cloning the [Makeswift Contentful Workshop repo](https://github.com/jamesqquick/makeswift-contentful-workshop).
@@ -370,43 +372,65 @@ Now, each component snapshot is going to be specific to the individual page it i
 
 ## Make the Blog Content Page Fully Editable in Makeswift
 
-So far, you've learned how to integrate Contentful into Next.js and make certain parts of a page editable in Makeswift. That works for most use cases, but there is another interesting use case. What if you wanted to fully customize the template of a blog post page from within Makeswift?
+So far, you've learned how to integrate Contentful into Next.js while making certain parts of a page editable in Makeswift. That works for most use cases, but there is another interesting use case. What if you wanted to visually customize the template of a blog post page from within Makeswift instead of in code? This would give you the ability to visually define the layout for blog post content and apply it to each blog post page.
+
+Since you're integrating with Contentful for blog post data, you would need to have individual components for each property to visually layout your blog post content template. For a given blog post, we have different properties we want to display: title, author, body content, etc. These properties match to a few different model types in contentful: text, media, and rich text.
+
+To solve this, you could create components specifically for each blog post property. However, what if you wanted something more general? Instead of a `ContentfulBlogPostTitle` component, what if you had components like `ContentfulText`, `ContentfulRichText`, `ContentfulImage` that could be connected to your individual fields, regardless of what their name is. Well, we've included a set of components like that under `/components/Contentful/common`.
+
+To visually build your blog template, update the code in `/app/blog/page.tsx` to the following.
 
 ```tsx
 import { notFound } from 'next/navigation'
 
+import { MakeswiftComponent } from '@makeswift/runtime/next'
+import { getSiteVersion } from '@makeswift/runtime/next/server'
+
+import { BLOG_POST_EMBEDDED_COMPONENT_ID } from '@/components/BlogPostCustomizable/BlogPost.makeswift'
+import { GetBlogsDocument } from '@/generated/contentful'
+import { client } from '@/lib/contentful/client'
 import { getAllBlogs, getBlog } from '@/lib/contentful/fetchers'
-import { formatBlog } from '@/lib/contentful/utils'
-import { BlogPostContent } from '@/vibes/soul/sections/blog-post-content'
+import { ContentfulProvider } from '@/lib/contentful/provider'
+import { client as MakeswiftClient } from '@/lib/makeswift/client'
 
 export async function generateStaticParams() {
-  //TODO: query blog posts
-  //TODO:return an array of objects with the slug of each blog post
+  const blogs = await getAllBlogs()
+  return blogs.map(blog => ({ slug: blog?.slug }))
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  //TODO: access the slug from params
-  //TODO: query the blog post with the slug
-  //TODO: convert the blog post
+  const { slug } = await params
+  if (!slug) {
+    return notFound()
+  }
 
-  return <div>TODO: Replace with blog content</div>
-}
-```
+  const componentSnapshot = await MakeswiftClient.getComponentSnapshot(
+    'blog-content-customizable',
+    {
+      siteVersion: await getSiteVersion(),
+    }
+  )
 
-```tsx
-import { getAllBlogs } from '@/lib/contentful/fetchers'
-import { formatBlogs } from '@/lib/contentful/utils'
-import { BlogPostList } from '@/vibes/soul/sections/blog-post-list'
-import { SectionLayout } from '@/vibes/soul/sections/section-layout'
+  if (componentSnapshot == null) return notFound()
 
-export default async function Page() {
-  //TODO:query the blog posts
-  //TODO: format the blog posts
+  const { blogPostCollection } = await client.request(GetBlogsDocument, {
+    filter: { slug },
+  })
+
+  if (!blogPostCollection) return notFound()
 
   return (
-    <SectionLayout>
-      <p>TODO: Replace this with the blog list</p>
-    </SectionLayout>
+    <ContentfulProvider value={blogPostCollection}>
+      <MakeswiftComponent
+        snapshot={componentSnapshot}
+        label="Blog Post Customizable"
+        type={BLOG_POST_EMBEDDED_COMPONENT_ID}
+      />
+    </ContentfulProvider>
   )
 }
 ```
+
+This main change here is that you are referencing a different component snapshot and `<MakeswiftComponent>`. Notice that the `id` for the snapshot is not unique per page. That's because we want this template to be used on each blog page.
+
+Back in Makeswift, you should see your page is now empty with a slot to put whatever you want inside. From the Component Tray, you can drag instances of the those components from the `Contentful -> Blog` group of components. For each Contentful copmonent, you'll need to connect it to a specific property from your data. You can set this in the **Field** property in the properties sidebar. After you've successfully connected to the correct data field, you can customize your blog layout as you'd like.

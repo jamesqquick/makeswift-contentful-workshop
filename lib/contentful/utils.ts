@@ -33,7 +33,7 @@ function flattenFields(
     const newPath = [...path, field.name]
 
     fields.push({
-      label: [field.name, ...path.slice()].join(' < '),
+      label: [field.name, ...path.slice()].reverse().join(' < '),
       path: newPath.join('.'),
       type: isRichTextField(field.type) ? 'RichText' : field.type.name,
     })

@@ -7,5 +7,5 @@ import '@/components/Contentful/entries/BlogPost/BlogPostRichText/BlogPostRichTe
 import '@/components/Contentful/entries/BlogPost/BlogPostText/BlogPostText.makeswift'
 import '@/components/EmailForm/EmailForm.makeswift'
 import '@/components/Marquee/Marquee.makeswift'
-// import '@/components/Section/Section.makeswift'
+import '@/components/Section/Section.makeswift'
 import '@/components/Tabs/Tabs.makeswift'

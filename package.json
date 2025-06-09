@@ -14,7 +14,7 @@
     "@contentful/rich-text-html-renderer": "^17.0.0",
     "@contentful/rich-text-react-renderer": "^16.0.1",
     "@graphql-codegen/cli": "^5.0.6",
-    "@makeswift/runtime": "^0.23.9",
+    "@makeswift/runtime": "^0.24.6",
     "@parcel/watcher": "^2.5.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.3",
