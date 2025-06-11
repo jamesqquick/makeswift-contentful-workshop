@@ -34,7 +34,7 @@ Contentful is a Headless CMS that allows you to define structured data to be use
 
 ## Create Data Model in Contentful
 
-Create a new data model in Contentful named `BlogPost` that includes the following properties. Each property marked with "\*" should be flagged as required.
+Create a new data model in Contentful by going to the **Content Model** tab and choosing **Start from Scratch**. Then, name it `BlogPost` and include the following properties. Each property marked with "\*" should be flagged as required.
 
 - **slug\*** - Short Text
 - **title\*** - Short Text
@@ -72,7 +72,7 @@ Start by cloning the [Makeswift Contentful Workshop repo](https://github.com/jam
 
 ### Connect to Makeswift
 
-Now, you'll need to connect your local project with Makeswift. To do this, first you'll need to update your app's URL. You can do this in Makeswift by going to **Settings > Host** and update the **Host URL** property to `localhost:3000`. While you're there, copy your **Site API Key** as well.
+Now, you'll need to connect your local project with Makeswift. To do this, first you'll need to update your app's URL. You can do this in Makeswift by going to **Settings > Host** and update the **Host URL** property to `http://localhost:3000/`. While you're there, copy your **Site API Key** as well.
 
 ![Makeswift host settings](/images//makeswift-host-settings.jpeg)
 
