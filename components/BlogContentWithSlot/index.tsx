@@ -13,7 +13,6 @@ export default function BlogContentWithSlot({ children }: Props) {
   if (!blogs || !Array.isArray(blogs) || blogs.length === 0) {
     return <div>No blog posts available</div>
   }
-  console.log('🚀 ~ BlogContentWithSlot ~ data:', blogs)
   const blog = blogs[0]
   const formattedBlog = formatBlog(blog)
   const breadcrumbs = [
