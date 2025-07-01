@@ -36,6 +36,7 @@ export function BlogPostList({
   emptyStateSubtitle = 'Check back later for more content.',
   placeholderCount = 6,
 }: BlogPostListProps) {
+  console.log('streamableBlogPosts', streamableBlogPosts)
   return (
     <Stream
       fallback={<BlogPostListSkeleton className={className} placeholderCount={placeholderCount} />}

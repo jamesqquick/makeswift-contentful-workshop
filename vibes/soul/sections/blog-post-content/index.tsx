@@ -30,7 +30,7 @@ export interface BlogPost {
   author?: string | null
   date: string
   tags?: Tag[] | null
-  content: string
+  content?: string | null
   image?: Image | null
 }
 
@@ -104,10 +104,12 @@ export function BlogPostContent({
                     width={1280}
                   />
                 )}
-                <article
-                  className="prose mx-auto w-full max-w-4xl space-y-4"
-                  dangerouslySetInnerHTML={{ __html: content }}
-                />
+                {content && (
+                  <article
+                    className="prose mx-auto w-full max-w-4xl space-y-4"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                )}
               </>
             )
           }}

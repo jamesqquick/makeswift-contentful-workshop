@@ -8,7 +8,7 @@ import * as Skeleton from '@/vibes/soul/primitives/skeleton'
 export interface BlogPost {
   title: string
   author?: string | null
-  content: string
+  content?: string | null
   date: string
   image?: {
     src: string
