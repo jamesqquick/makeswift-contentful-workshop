@@ -1,5 +1,1 @@
-import '@/components/Accordions/Accordions.makeswift'
 import '@/components/BlogContentWithSlot/BlogContentWithSlot.makeswift'
-import '@/components/Marquee/Marquee.makeswift'
-import '@/components/Section/Section.makeswift'
-import '@/components/Tabs/Tabs.makeswift'

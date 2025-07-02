@@ -170,8 +170,17 @@ export type AssetFilter = {
 
 export type AssetLinkingCollections = {
   __typename?: 'AssetLinkingCollections';
+  authorCollection?: Maybe<AuthorCollection>;
   blogPostCollection?: Maybe<BlogPostCollection>;
   entryCollection?: Maybe<EntryCollection>;
+};
+
+
+export type AssetLinkingCollectionsAuthorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -213,67 +222,265 @@ export enum AssetOrder {
   WidthDesc = 'width_DESC'
 }
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type Author = Entry & _Node & {
+  __typename?: 'Author';
+  _id: Scalars['ID']['output'];
+  avatar?: Maybe<Asset>;
+  contentfulMetadata: ContentfulMetadata;
+  description?: Maybe<AuthorDescription>;
+  jobTitle?: Maybe<Scalars['String']['output']>;
+  linkedFrom?: Maybe<AuthorLinkingCollections>;
+  name?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  sys: Sys;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type AuthorAvatarArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type AuthorDescriptionArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type AuthorJobTitleArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type AuthorLinkedFromArgs = {
+  allowedLocales?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type AuthorNameArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/author) */
+export type AuthorSlugArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type AuthorCollection = {
+  __typename?: 'AuthorCollection';
+  items: Array<Maybe<Author>>;
+  limit: Scalars['Int']['output'];
+  skip: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type AuthorDescription = {
+  __typename?: 'AuthorDescription';
+  json: Scalars['JSON']['output'];
+  links: AuthorDescriptionLinks;
+};
+
+export type AuthorDescriptionAssets = {
+  __typename?: 'AuthorDescriptionAssets';
+  block: Array<Maybe<Asset>>;
+  hyperlink: Array<Maybe<Asset>>;
+};
+
+export type AuthorDescriptionEntries = {
+  __typename?: 'AuthorDescriptionEntries';
+  block: Array<Maybe<Entry>>;
+  hyperlink: Array<Maybe<Entry>>;
+  inline: Array<Maybe<Entry>>;
+};
+
+export type AuthorDescriptionLinks = {
+  __typename?: 'AuthorDescriptionLinks';
+  assets: AuthorDescriptionAssets;
+  entries: AuthorDescriptionEntries;
+  resources: AuthorDescriptionResources;
+};
+
+export type AuthorDescriptionResources = {
+  __typename?: 'AuthorDescriptionResources';
+  block: Array<AuthorDescriptionResourcesBlock>;
+  hyperlink: Array<AuthorDescriptionResourcesHyperlink>;
+  inline: Array<AuthorDescriptionResourcesInline>;
+};
+
+export type AuthorDescriptionResourcesBlock = ResourceLink & {
+  __typename?: 'AuthorDescriptionResourcesBlock';
+  sys: ResourceSys;
+};
+
+export type AuthorDescriptionResourcesHyperlink = ResourceLink & {
+  __typename?: 'AuthorDescriptionResourcesHyperlink';
+  sys: ResourceSys;
+};
+
+export type AuthorDescriptionResourcesInline = ResourceLink & {
+  __typename?: 'AuthorDescriptionResourcesInline';
+  sys: ResourceSys;
+};
+
+export type AuthorFilter = {
+  AND?: InputMaybe<Array<InputMaybe<AuthorFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<AuthorFilter>>>;
+  avatar_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  description_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  jobTitle?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_contains?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  jobTitle_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  jobTitle_not?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_not_contains?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slug_contains?: InputMaybe<Scalars['String']['input']>;
+  slug_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  slug_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  slug_not?: InputMaybe<Scalars['String']['input']>;
+  slug_not_contains?: InputMaybe<Scalars['String']['input']>;
+  slug_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  sys?: InputMaybe<SysFilter>;
+};
+
+export type AuthorLinkingCollections = {
+  __typename?: 'AuthorLinkingCollections';
+  blogPostCollection?: Maybe<BlogPostCollection>;
+  entryCollection?: Maybe<EntryCollection>;
+};
+
+
+export type AuthorLinkingCollectionsBlogPostCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Array<InputMaybe<AuthorLinkingCollectionsBlogPostCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type AuthorLinkingCollectionsEntryCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum AuthorLinkingCollectionsBlogPostCollectionOrder {
+  FeedDateAsc = 'feedDate_ASC',
+  FeedDateDesc = 'feedDate_DESC',
+  SlugAsc = 'slug_ASC',
+  SlugDesc = 'slug_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC'
+}
+
+export enum AuthorOrder {
+  JobTitleAsc = 'jobTitle_ASC',
+  JobTitleDesc = 'jobTitle_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  SlugAsc = 'slug_ASC',
+  SlugDesc = 'slug_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC'
+}
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPost = Entry & _Node & {
   __typename?: 'BlogPost';
   _id: Scalars['ID']['output'];
-  author?: Maybe<Scalars['String']['output']>;
+  author?: Maybe<Author>;
   banner?: Maybe<Asset>;
   body?: Maybe<BlogPostBody>;
   contentfulMetadata: ContentfulMetadata;
   description?: Maybe<Scalars['String']['output']>;
+  feedDate?: Maybe<Scalars['DateTime']['output']>;
   linkedFrom?: Maybe<BlogPostLinkingCollections>;
-  publishDate?: Maybe<Scalars['DateTime']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   sys: Sys;
   title?: Maybe<Scalars['String']['output']>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostAuthorArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<AuthorFilter>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostBannerArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
   preview?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostBodyArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostDescriptionArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
+export type BlogPostFeedDateArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostLinkedFromArgs = {
   allowedLocales?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
-export type BlogPostPublishDateArgs = {
-  locale?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostSlugArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-/** [See type definition](https://app.contentful.com/spaces/69g6ws6qhwn1/content_types/blogPost) */
+/** [See type definition](https://app.contentful.com/spaces/gjru90fmgbdx/content_types/blogPost) */
 export type BlogPostTitleArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
@@ -337,13 +544,8 @@ export type BlogPostCollection = {
 export type BlogPostFilter = {
   AND?: InputMaybe<Array<InputMaybe<BlogPostFilter>>>;
   OR?: InputMaybe<Array<InputMaybe<BlogPostFilter>>>;
-  author?: InputMaybe<Scalars['String']['input']>;
-  author_contains?: InputMaybe<Scalars['String']['input']>;
+  author?: InputMaybe<CfAuthorNestedFilter>;
   author_exists?: InputMaybe<Scalars['Boolean']['input']>;
-  author_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  author_not?: InputMaybe<Scalars['String']['input']>;
-  author_not_contains?: InputMaybe<Scalars['String']['input']>;
-  author_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   banner_exists?: InputMaybe<Scalars['Boolean']['input']>;
   body_contains?: InputMaybe<Scalars['String']['input']>;
   body_exists?: InputMaybe<Scalars['Boolean']['input']>;
@@ -356,15 +558,15 @@ export type BlogPostFilter = {
   description_not?: InputMaybe<Scalars['String']['input']>;
   description_not_contains?: InputMaybe<Scalars['String']['input']>;
   description_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  publishDate?: InputMaybe<Scalars['DateTime']['input']>;
-  publishDate_exists?: InputMaybe<Scalars['Boolean']['input']>;
-  publishDate_gt?: InputMaybe<Scalars['DateTime']['input']>;
-  publishDate_gte?: InputMaybe<Scalars['DateTime']['input']>;
-  publishDate_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
-  publishDate_lt?: InputMaybe<Scalars['DateTime']['input']>;
-  publishDate_lte?: InputMaybe<Scalars['DateTime']['input']>;
-  publishDate_not?: InputMaybe<Scalars['DateTime']['input']>;
-  publishDate_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  feedDate?: InputMaybe<Scalars['DateTime']['input']>;
+  feedDate_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  feedDate_gt?: InputMaybe<Scalars['DateTime']['input']>;
+  feedDate_gte?: InputMaybe<Scalars['DateTime']['input']>;
+  feedDate_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  feedDate_lt?: InputMaybe<Scalars['DateTime']['input']>;
+  feedDate_lte?: InputMaybe<Scalars['DateTime']['input']>;
+  feedDate_not?: InputMaybe<Scalars['DateTime']['input']>;
+  feedDate_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
   slug?: InputMaybe<Scalars['String']['input']>;
   slug_contains?: InputMaybe<Scalars['String']['input']>;
   slug_exists?: InputMaybe<Scalars['Boolean']['input']>;
@@ -396,12 +598,8 @@ export type BlogPostLinkingCollectionsEntryCollectionArgs = {
 };
 
 export enum BlogPostOrder {
-  AuthorAsc = 'author_ASC',
-  AuthorDesc = 'author_DESC',
-  DescriptionAsc = 'description_ASC',
-  DescriptionDesc = 'description_DESC',
-  PublishDateAsc = 'publishDate_ASC',
-  PublishDateDesc = 'publishDate_DESC',
+  FeedDateAsc = 'feedDate_ASC',
+  FeedDateDesc = 'feedDate_DESC',
   SlugAsc = 'slug_ASC',
   SlugDesc = 'slug_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
@@ -591,6 +789,8 @@ export type Query = {
   _nodes: Array<Maybe<_Node>>;
   asset?: Maybe<Asset>;
   assetCollection?: Maybe<AssetCollection>;
+  author?: Maybe<Author>;
+  authorCollection?: Maybe<AuthorCollection>;
   blogPost?: Maybe<BlogPost>;
   blogPostCollection?: Maybe<BlogPostCollection>;
   entryCollection?: Maybe<EntryCollection>;
@@ -625,6 +825,23 @@ export type QueryAssetCollectionArgs = {
   preview?: InputMaybe<Scalars['Boolean']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<AssetFilter>;
+};
+
+
+export type QueryAuthorArgs = {
+  id: Scalars['String']['input'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryAuthorCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Array<InputMaybe<AuthorOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<AuthorFilter>;
 };
 
 
@@ -726,117 +943,40 @@ export type _Node = {
   _id: Scalars['ID']['output'];
 };
 
-/** One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string. */
-export type __EnumValue = {
-  __typename?: '__EnumValue';
-  name: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  isDeprecated: Scalars['Boolean']['output'];
-  deprecationReason?: Maybe<Scalars['String']['output']>;
-};
-
-/** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */
-export type __Field = {
-  __typename?: '__Field';
-  name: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  args: Array<__InputValue>;
-  type: __Type;
-  isDeprecated: Scalars['Boolean']['output'];
-  deprecationReason?: Maybe<Scalars['String']['output']>;
-};
-
-
-/** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */
-export type __FieldArgsArgs = {
-  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-/** Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value. */
-export type __InputValue = {
-  __typename?: '__InputValue';
-  name: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  type: __Type;
-  /** A GraphQL-formatted string representing the default value for this input value. */
-  defaultValue?: Maybe<Scalars['String']['output']>;
-  isDeprecated: Scalars['Boolean']['output'];
-  deprecationReason?: Maybe<Scalars['String']['output']>;
-};
-
-/**
- * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
- *
- * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
- */
-export type __Type = {
-  __typename?: '__Type';
-  kind: __TypeKind;
-  name?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  specifiedByURL?: Maybe<Scalars['String']['output']>;
-  fields?: Maybe<Array<__Field>>;
-  interfaces?: Maybe<Array<__Type>>;
-  possibleTypes?: Maybe<Array<__Type>>;
-  enumValues?: Maybe<Array<__EnumValue>>;
-  inputFields?: Maybe<Array<__InputValue>>;
-  ofType?: Maybe<__Type>;
-  isOneOf?: Maybe<Scalars['Boolean']['output']>;
+export type CfAuthorNestedFilter = {
+  AND?: InputMaybe<Array<InputMaybe<CfAuthorNestedFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<CfAuthorNestedFilter>>>;
+  avatar_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  contentfulMetadata?: InputMaybe<ContentfulMetadataFilter>;
+  description_contains?: InputMaybe<Scalars['String']['input']>;
+  description_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  description_not_contains?: InputMaybe<Scalars['String']['input']>;
+  jobTitle?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_contains?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  jobTitle_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  jobTitle_not?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_not_contains?: InputMaybe<Scalars['String']['input']>;
+  jobTitle_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_contains?: InputMaybe<Scalars['String']['input']>;
+  name_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name_not?: InputMaybe<Scalars['String']['input']>;
+  name_not_contains?: InputMaybe<Scalars['String']['input']>;
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slug_contains?: InputMaybe<Scalars['String']['input']>;
+  slug_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  slug_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  slug_not?: InputMaybe<Scalars['String']['input']>;
+  slug_not_contains?: InputMaybe<Scalars['String']['input']>;
+  slug_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  sys?: InputMaybe<SysFilter>;
 };
 
 
-/**
- * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
- *
- * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
- */
-export type __TypeFieldsArgs = {
-  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
-/**
- * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
- *
- * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
- */
-export type __TypeEnumValuesArgs = {
-  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
-/**
- * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
- *
- * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
- */
-export type __TypeInputFieldsArgs = {
-  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-/** An enum describing what kind of type a given `__Type` is. */
-export enum __TypeKind {
-  /** Indicates this type is a scalar. */
-  Scalar = 'SCALAR',
-  /** Indicates this type is an object. `fields` and `interfaces` are valid fields. */
-  Object = 'OBJECT',
-  /** Indicates this type is an interface. `fields`, `interfaces`, and `possibleTypes` are valid fields. */
-  Interface = 'INTERFACE',
-  /** Indicates this type is a union. `possibleTypes` is a valid field. */
-  Union = 'UNION',
-  /** Indicates this type is an enum. `enumValues` is a valid field. */
-  Enum = 'ENUM',
-  /** Indicates this type is an input object. `inputFields` is a valid field. */
-  InputObject = 'INPUT_OBJECT',
-  /** Indicates this type is a list. `ofType` is a valid field. */
-  List = 'LIST',
-  /** Indicates this type is a non-null. `ofType` is a valid field. */
-  NonNull = 'NON_NULL'
-}
-
-export const TypeFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Type"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"__Type"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<TypeFragment, unknown>;
-export const GetBlogsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBlogs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"defaultValue":{"kind":"IntValue","value":"8"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"defaultValue":{"kind":"IntValue","value":"0"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"order"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BlogPostOrder"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"BlogPostFilter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"blogPostCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"Variable","name":{"kind":"Name","value":"order"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"body"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"json"}}]}},{"kind":"Field","name":{"kind":"Name","value":"banner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}},{"kind":"Field","name":{"kind":"Name","value":"publishDate"}},{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]}}]} as unknown as DocumentNode<GetBlogsQuery, GetBlogsQueryVariables>;
-export const TypesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Types"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"defaultValue":{"kind":"StringValue","value":"BlogPost","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__type"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Type"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Type"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"__Type"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<TypesQuery, TypesQueryVariables>;
+export const GetBlogsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBlogs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"defaultValue":{"kind":"IntValue","value":"8"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},"defaultValue":{"kind":"IntValue","value":"0"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"order"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BlogPostOrder"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"BlogPostFilter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"blogPostCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"Variable","name":{"kind":"Name","value":"order"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"body"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"json"}}]}},{"kind":"Field","name":{"kind":"Name","value":"banner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}},{"kind":"Field","name":{"kind":"Name","value":"feedDate"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetBlogsQuery, GetBlogsQueryVariables>;
 export type GetBlogsQueryVariables = Exact<{
   limit?: Scalars['Int']['input'];
   skip?: Scalars['Int']['input'];
@@ -845,13 +985,4 @@ export type GetBlogsQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogsQuery = { __typename?: 'Query', blogPostCollection?: { __typename?: 'BlogPostCollection', total: number, items: Array<{ __typename: 'BlogPost', _id: string, slug?: string | null, title?: string | null, description?: string | null, publishDate?: string | null, author?: string | null, body?: { __typename?: 'BlogPostBody', json: { [key: string]: any } } | null, banner?: { __typename: 'Asset', title?: string | null, description?: string | null, contentType?: string | null, fileName?: string | null, url?: string | null, width?: number | null, height?: number | null } | null } | null> } | null };
-
-export type TypeFragment = { __typename?: '__Type', name?: string | null, fields?: Array<{ __typename?: '__Field', name: string, type: { __typename?: '__Type', name?: string | null, fields?: Array<{ __typename?: '__Field', name: string, type: { __typename?: '__Type', name?: string | null } }> | null } }> | null };
-
-export type TypesQueryVariables = Exact<{
-  name?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type TypesQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', name?: string | null, fields?: Array<{ __typename?: '__Field', name: string, type: { __typename?: '__Type', name?: string | null, fields?: Array<{ __typename?: '__Field', name: string, type: { __typename?: '__Type', name?: string | null } }> | null } }> | null } | null };
+export type GetBlogsQuery = { __typename?: 'Query', blogPostCollection?: { __typename?: 'BlogPostCollection', total: number, items: Array<{ __typename: 'BlogPost', _id: string, slug?: string | null, title?: string | null, description?: string | null, feedDate?: string | null, body?: { __typename?: 'BlogPostBody', json: { [key: string]: any } } | null, banner?: { __typename: 'Asset', title?: string | null, description?: string | null, contentType?: string | null, fileName?: string | null, url?: string | null, width?: number | null, height?: number | null } | null, author?: { __typename?: 'Author', name?: string | null } | null } | null> } | null };

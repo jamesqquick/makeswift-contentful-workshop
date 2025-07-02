@@ -1,60 +1,35 @@
-import { BlogPostOrder, GetBlogsDocument } from '@/generated/contentful'
+import { BlogPostOrder, GetBlogsDocument, GetBlogsQuery } from '@/generated/contentful'
 
 import { client } from './client'
+import { BlogPostFromQuery } from './utils'
 
 const PAGINATION_LIMIT = 100 // Contentful's max items per page
 
-export type QueriedBlogPost = {
-  __typename: 'BlogPost'
-  _id: string
-  slug: string
-  title: string
-  description: string
-  publishDate: string
-  author: string
-  body: {
-    __typename?: 'BlogPostBody'
-    json: {
-      [key: string]: any
-    }
-  }
-  banner?: {
-    __typename: 'Asset'
-    title: string
-    description: string
-    contentType: string
-    fileName: string
-    url: string
-    width: number
-    height: number
-  } | null
-}
-
-export async function getAllBlogs(): Promise<QueriedBlogPost[]> {
-  let allBlogs = []
+export async function getAllBlogs(): Promise<BlogPostFromQuery[]> {
+  let allBlogs: BlogPostFromQuery[] = []
   let hasMore = true
   let skip = 0
 
   while (hasMore) {
-    const { blogPostCollection } = await client.request(GetBlogsDocument, {
+    const { blogPostCollection } = await client.request<GetBlogsQuery>(GetBlogsDocument, {
       limit: PAGINATION_LIMIT,
       skip,
-      order: [BlogPostOrder.PublishDateDesc],
+      order: [BlogPostOrder.FeedDateDesc],
     })
 
     const items = blogPostCollection?.items ?? []
-    allBlogs.push(...items)
+    allBlogs.push(...items.filter((item): item is BlogPostFromQuery => Boolean(item)))
 
     hasMore = items.length === PAGINATION_LIMIT
     skip += PAGINATION_LIMIT
   }
 
-  return allBlogs as unknown as QueriedBlogPost[]
+  return allBlogs
 }
 
-export async function getBlog(slug: string): Promise<QueriedBlogPost | null> {
-  const { blogPostCollection } = await client.request(GetBlogsDocument, {
+export async function getBlog(slug: string) {
+  const { blogPostCollection } = await client.request<GetBlogsQuery>(GetBlogsDocument, {
     filter: { slug },
   })
-  return (blogPostCollection?.items[0] as unknown as QueriedBlogPost) ?? null
+  return blogPostCollection?.items[0] ?? null
 }

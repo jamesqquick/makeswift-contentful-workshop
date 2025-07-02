@@ -4,7 +4,7 @@ import { MakeswiftComponent } from '@makeswift/runtime/next'
 import { getSiteVersion } from '@makeswift/runtime/next/server'
 
 import { BLOG_CONTENT_WITH_SLOT_TYPE } from '@/components/BlogContentWithSlot/BlogContentWithSlot.makeswift'
-import { GetBlogsDocument } from '@/generated/contentful'
+import { GetBlogsDocument, GetBlogsQuery } from '@/generated/contentful'
 import { client } from '@/lib/contentful/client'
 import { getAllBlogs } from '@/lib/contentful/fetchers'
 import { ContentfulProvider } from '@/lib/contentful/provider'
@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   if (componentSnapshot == null) return notFound()
 
-  const blogData = await client.request(GetBlogsDocument, {
+  const blogData = await client.request<GetBlogsQuery>(GetBlogsDocument, {
     filter: { slug },
   })
 
