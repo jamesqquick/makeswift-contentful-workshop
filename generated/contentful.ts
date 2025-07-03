@@ -13,11 +13,11 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  DateTime: { input: string; output: string; }
-  Dimension: { input: number; output: number; }
-  HexColor: { input: string; output: string; }
-  JSON: { input: { [key: string]: any }; output: { [key: string]: any }; }
-  Quality: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  Dimension: { input: any; output: any; }
+  HexColor: { input: any; output: any; }
+  JSON: { input: any; output: any; }
+  Quality: { input: any; output: any; }
 };
 
 /** Represents a binary file in a space. An asset can be any file type. */
@@ -985,4 +985,4 @@ export type GetBlogsQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogsQuery = { __typename?: 'Query', blogPostCollection?: { __typename?: 'BlogPostCollection', total: number, items: Array<{ __typename: 'BlogPost', _id: string, slug?: string | null, title?: string | null, description?: string | null, feedDate?: string | null, body?: { __typename?: 'BlogPostBody', json: { [key: string]: any } } | null, banner?: { __typename: 'Asset', title?: string | null, description?: string | null, contentType?: string | null, fileName?: string | null, url?: string | null, width?: number | null, height?: number | null } | null, author?: { __typename?: 'Author', name?: string | null } | null } | null> } | null };
+export type GetBlogsQuery = { __typename?: 'Query', blogPostCollection?: { __typename?: 'BlogPostCollection', total: number, items: Array<{ __typename: 'BlogPost', _id: string, slug?: string | null, title?: string | null, description?: string | null, feedDate?: any | null, body?: { __typename?: 'BlogPostBody', json: any } | null, banner?: { __typename: 'Asset', title?: string | null, description?: string | null, contentType?: string | null, fileName?: string | null, url?: string | null, width?: number | null, height?: number | null } | null, author?: { __typename?: 'Author', name?: string | null } | null } | null> } | null };

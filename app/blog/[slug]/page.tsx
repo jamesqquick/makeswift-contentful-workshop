@@ -34,7 +34,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     filter: { slug },
   })
 
-  if (!blogData.blogPostCollection) return notFound()
+  if (!blogData.blogPostCollection || blogData.blogPostCollection.items.length === 0)
+    return notFound()
 
   return (
     <ContentfulProvider value={blogData.blogPostCollection?.items}>

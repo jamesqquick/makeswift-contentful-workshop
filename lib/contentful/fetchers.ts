@@ -26,10 +26,3 @@ export async function getAllBlogs(): Promise<BlogPostFromQuery[]> {
 
   return allBlogs
 }
-
-export async function getBlog(slug: string) {
-  const { blogPostCollection } = await client.request<GetBlogsQuery>(GetBlogsDocument, {
-    filter: { slug },
-  })
-  return blogPostCollection?.items[0] ?? null
-}

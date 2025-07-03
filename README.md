@@ -1,461 +1,247 @@
-# Makeswift Contentful Workshop
+# Makeswift + Contentful Integration
 
-Learn how to integrate [Contentful](https://www.contentful.com/) into a Next.js site that is editable inside of [Makeswift](https://makeswift.com/).
-
-## Things to Know
-
-- Makeswift is [HIRING](https://www.makeswift.com/careers)!
-- Makeswift booth in the exhibition hall on the right-hand side. Come talk to us!
-- [AI Happy Hour (tonight from 5-8)](https://atlanta.aitinkerers.org/p/happy-hour-with-ai-tinkerers-and-okta)
+This integration demonstrates how to combine the power of Contentful's content management with Makeswift's visual page building capabilities. Build visually editable blog websites where content is managed in Contentful but layouts are designed in Makeswift.
 
 ## Prerequisites
 
-To follow along in this workshop, ensure you have met the following prerequisites.
+- [Node.js](https://nodejs.org/) 20.x or later
+- [Makeswift](https://www.makeswift.com/) account (for visual page building) [Sign up for free](https://app.makeswift.com/signup)
+- [Contentful](https://www.contentful.com/) account (for content management) [Sign up for free](https://www.contentful.com/sign-up)
+- Basic familiarity with [Next.js App Router](https://nextjs.org/docs/app)
 
-- Contentful account (Free)
-- Makeswift account (Free)
-- Node.js vs. 20+ installed
-- Text editor like VS Code installed
+This guide assumes that you're familiar with Makeswift and setting up a custom host. Read here to learn more: https://docs.makeswift.com/developer/app-router/installation
 
-## Intro to Makeswift
+## Project Structure
 
-For a quick overview of Makeswift, follow the [Quickstart](https://docs.makeswift.com/product/quickstart)
-
-## Getting Started in Makeswift
-
-- Create [Makeswift](https://makeswift.com/) account
-- Create new website
-  - choose **Start with the builder** then choose **Venture** as the template
-- Explore the Visual Builder by creating and editing elements in the Canvas
-
-## Intro to Contentful
-
-Contentful is a Headless CMS that allows you to define structured data to be used in your website. In this workshop, you'll use Contentful to store data associated with a blog.
-
-## Create Data Model in Contentful
-
-Create a new data model in Contentful by going to the **Content Model** tab and choosing **Start from Scratch**. Then, name it `BlogPost` and include the following properties. Each property marked with "\*" should be flagged as required.
-
-- **slug\*** - Short Text
-- **title\*** - Short Text
-- **description\*** - Short Text
-- **body\*** - Rich text
-- **banner** - Media
-- **publishDate\*** - Date and Time
-- **author\*** - Short text
-
-It's important that the names and types match exactly what is listed here. It should look like this.
-
-![Blog Post content model](/images/blog-post-content-model.png)
-
-Now, add a sample `BlogPost`.
-
-```tsx
-{
-	slug: 'purify-plants',
-	title: `Top 5 Plants to Purify Your Home's Air`,
-	description: `The Snake Plant, also known as Mother-in-Law's Tongue, is one of the most effective plants for filtering out several toxins.`,
-	content: `The Snake Plant, also known as Mother-in-Law's Tongue, is one of the most effective plants for filtering out several toxins. It thrives in low light, making it perfect for bedrooms and living rooms.`
-	author: `Sam Smith`
-}
+```
+makeswift-contentful-workshop/
+├── app/                          # Next.js App Router pages
+│   ├── blog/                     # Blog-related routes
+│   │   ├── [slug]/               # Dynamic blog post pages
+│   │   └── page.tsx              # Blog index page
+│   ├── api/makeswift/            # Makeswift API routes
+│   ├── [[...path]]/              # Dynamic Makeswift routes
+│   ├── layout.tsx                # Root layout
+│   └── globals.css               # Global styles
+├── components/                   # React components
+│   ├── BlogContentWithSlot/      # Main blog component with slot
+│   ├── Section/                  # Section components
+│   └── Warning/                  # Error components
+├── lib/                          # Utility functions and configs
+│   ├── contentful/               # Contentful utilities
+│   │   ├── queries/              # GraphQL queries
+│   │   ├── client.ts             # GraphQL client
+│   │   ├── fetchers.ts           # Data fetching functions
+│   │   ├── provider.tsx          # React context provider
+│   │   └── utils.ts              # Formatting utilities
+│   └── makeswift/                # Makeswift configuration
+├── generated/                    # Auto-generated TypeScript types
+│   └── contentful.ts             # Contentful GraphQL types
+├── vibes/soul/                   # Pre-built UI components
+│   ├── primitives/               # Basic UI primitives
+│   └── sections/                 # Layout sections
+└── env.ts                        # Environment variable validation
 ```
 
-If you would like to add the `banner` image, you can download [this image file](https://storage.googleapis.com/s.mkswft.com/RmlsZTo1NGFjNmRiYi0xZDE2LTRiOTEtOWUyZS0zMjY1ZjBmZTk0ZjU=/plant-blog-1.jpeg) and upload to Contentful.
+## Quick Start
 
-For more realistic data for the `content` property, you can copy the rendered HTML from the preview section of the [Blog Post Content docs](https://vibes.site/docs/soul/blog-post-content) in VIBES. We'll talk more about VIBES later.
-
-You can also copy additional sample blog posts data from the [`Blog Post List`](https://vibes.site/docs/soul/blog-post-list) component docs. **You'll need at least one other post to see appropriate results for a few of the sections below.**
-
-## Local Project Setup
-
-Start by cloning the [Makeswift Contentful Workshop repo](https://github.com/jamesqquick/makeswift-contentful-workshop).
-
-### Connect to Makeswift
-
-Now, you'll need to connect your local project with Makeswift. To do this, first you'll need to update your app's URL. You can do this in Makeswift by going to **Settings > Host** and update the **Host URL** property to `http://localhost:3000/`. While you're there, copy your **Site API Key** as well.
-
-![Makeswift host settings](/images//makeswift-host-settings.jpeg)
-
-Now, in your local code, make a copy of `.env.example` file and name it `.env.local`. Then update the `MAKESWIFT_SITE_API_KEY` property with the API you just copied.
-
-```tsx
-    MAKESWIFT_SITE_API_KEY=<YOUR_API_KEY>
-```
-
-### Connect to Contentful
-
-Now, you need to get your **Space ID** and **Content Delivery API - access token** from Contenful. You can create new API key by going to **Settings → API Keys** and then click **Add API Key**.
-
-![Contentful API settings](/images/contentful-api-key.jpeg)
-
-Then, update your environment variables in `.env.local` with those values.
-
-```tsx
-MAKESWIFT_SITE_API_KEY=<YOUR_API_KEY>
-NEXT_PUBLIC_CONTENTFUL_SPACE_ID=<YOUR_SPACE_ID>
-NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN=<YOUR_ACCESS_TOKEN>
-```
-
-### Generate TypeScript Types for GraphQl
-
-Now, you'll need to generate the TypeScript types to be used with the GraphQL queries. You can see the GraphQL queries defined in the `/components/Contentful/queries` directory. To generate the types, run the following command.
-
-```tsx
-    npm run codegen-ts
-```
-
-If you have any issues, ensure your content model in Contentful matches exactly what is defined above.
-
-### Run Locally
-
-Now you can start your application by running:
+### 1. Clone the repository
 
 ```bash
-    npm run dev
+   npx makeswift@latest init --example=contentful
 ```
 
-In Makeswift, refresh the tab, and you should see it is successfully connected to your locally running project.
+### 2. Install dependencies
 
-## VIBES Components
-
-In this workshop, we're going to use pre-built component from [VIBES](https://vibes.site/) to display blog post cards and content. Specifically, we'll use the following components.
-
-- [Blog Post List](https://vibes.site/docs/soul/blog-post-list)
-- [Blog Post Content](https://vibes.site/docs/soul/blog-post-content)
-
-Take some time to explore these components if you're interested. These are copy and paste components and have already been included in the repo, so no action necessary.
-
-## Querying Blog Content for Blog List Page
-
-Now, you'll need to update the blog index page (`/app/blog/page.tsx) to display the list of blog posts from Contentful by:
-
-- Querying posts by calling `getAllBlogs`
-- Converting them to format expected by the `BlogPostList` component by calling `formatPosts()`
-- Rendering the `<BlogPostList>` component inside of the `<SectionLayout>` component and passing the blog posts
-
-These functions and components have already been imported for you to use. Paste in the following code:
-
-```tsx
-import { getAllBlogs } from '@/lib/contentful/fetchers'
-import { formatBlogs } from '@/lib/contentful/utils'
-import { BlogPostList } from '@/vibes/soul/sections/blog-post-list'
-import { SectionLayout } from '@/vibes/soul/sections/section-layout'
-
-export default async function Page() {
-  const blogs = await getAllBlogs()
-  const formattedBlogs = formatBlogs(blogs, false)
-
-  return (
-    <SectionLayout>
-      <BlogPostList blogPosts={formattedBlogs} />
-    </SectionLayout>
-  )
-}
+```bash
+pnpm install
 ```
 
-Since this route is defined in the source code, you'll need to manually add this page in Makeswift to see the results. You can do this by creating a new page in the Navigation Sidebar on the left. Update it's name to be **Blog List** and it's path (in the properties sidebar on the right) to `/blog`. After refreshing the page, you should see the results show up appropriately.
+### 3. Configure environment variables
 
-![Blog list page in Makeswift](/images/blog-list-makeswift.jpeg)
+Create a `.env.local` file and add your credentials:
 
-## Displaying Blog Post Content
-
-Open the `/blog/[slug]/page.tsx` file. This is a [dynamic route](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes) in Next.js. In this case, this means that this route will be used to dynamically generate individual pages for each blog post.
-
-> You can find the final code for this section in `/blog/basic/[slug]/page.tsx`
-
-Here, you need to query the appropriate blog post based on the dynamic `slug` property. To do this, first, you'll need to define the routes that will be generated by implementing `getStaticParams`.
-
-```tsx
-export async function generateStaticParams() {
-  const blogs = await getAllBlogs()
-  return blogs.map(blog => ({ slug: blog?.slug }))
-}
+```
+MAKESWIFT_SITE_API_KEY=your_makeswift_api_key
+CONTENTFUL_SPACE_ID=your_space_id
+CONTENTFUL_ACCESS_TOKEN=your_access_token
 ```
 
-Next, you'll need to update the `Page` component to:
+### 4. Set up your content model in Contentful
 
-- retrieve the `slug` prop from `params`
-- return `notFound()` if there isn't a slug
-- query the blog post by the slug by calling `getBlog(slug)`
-- return `notFound() if no blog post is found
-- format the blog by calling `formatBlog()`
-- display the blog content by using the `<BlogPostContent>` component
+Create the following content types in your Contentful space:
 
-```tsx
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+**Author Content Type:**
 
-  if (!slug) {
-    return notFound()
-  }
+- **Name\*** (Short text) - The author's name (mark as "Entry title")
+- **Slug\*** (Short text) - URL-friendly identifier
+- **Job Title** (Short text) - The author's job title
+- **Description** (Rich text) - Author bio
+- **Avatar** (Media) - Profile image
 
-  const blogData = await client.request(GetBlogsDocument, {
-    filter: { slug },
-  })
+**BlogPost Content Type:**
 
-  if (!blogData.blogPostCollection) return notFound()
+- **Title\*** (Short text) - Post title (mark as "Entry title")
+- **Description** (Long text) - Brief summary
+- **Slug\*** (Short text) - URL-friendly identifier
+- **Feed Date\*** (Date & time) - Publication date
+- **Body** (Rich text) - Main content
+- **Author** (Reference) - Reference to Author content type
+- **Banner** (Media) - Hero image
 
-  if (!blog) return notFound()
+Add sample content for both Authors and BlogPosts to test the integration.
 
-  const formattedBlog = formatBlog(blog)
+### 5. Generate TypeScript types
 
-  return <BlogPostContent blogPost={formattedBlog} />
-}
+```bash
+pnpm run codegen-ts
 ```
 
-### View in Makeswift
+This command watches for changes and regenerates types automatically.
 
-To view an individual blog post, you'll need to add the page manually in Makeswift. Create a new page called **Purify Plants** with a `path` of `/blog/purify-plants`. Not that the second part of this path (after `/blog/`) should match the slug property as defined in Contentful.
+### 6. Run the development server
 
-After refreshing the page, you should see the blog post content.
-
-![Blog post content page](/images/blog-post-content-no-breadcrumbs.jpeg)
-
-### Displaying breadcrumbs
-
-The `<BlogPostContent>` component from VIBES also includes the ability to display breadcrumbs. You can use this to provide quick links for the user to get back to the home page, the blog index page, etc.
-
-To do this, you'll need to add a `breadcrumbs` array and pass it to the `<BlogPostContent>` component. The result should look like this.
-
-```tsx
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-
-  if (!slug) {
-    return notFound()
-  }
-
-  const blog = await getBlog(slug)
-
-  if (!blog) return notFound()
-
-  const formattedBlog = formatBlog(blog)
-
-  const breadcrumbs = [
-    {
-      id: '1',
-      label: 'Home',
-      href: '/',
-    },
-    {
-      id: '2',
-      label: 'Blog',
-      href: '/blog',
-    },
-    {
-      id: '3',
-      label: formattedBlog.title,
-      href: '#',
-    },
-  ]
-  return <BlogPostContent breadcrumbs={breadcrumbs} blogPost={formattedBlog} />
-}
+```bash
+pnpm dev
 ```
 
-Now, you'll see a nice breadcrumbs navigation menu showing up.
+## Building Blog Pages in Makeswift
 
-![Blog post content page](/images/blog-post-content-breadcrumbs.jpeg)
+### Blog Index Page (`/blog`)
 
-## Custom Components in Makeswift
+The blog index page displays a list of all blog posts and is implemented as a static Next.js page. To set it up in Makeswift:
 
-For a quick overview of how custom components are built with Makeswift, refer to the [Built-in components guide](https://docs.makeswift.com/developer/guides/how-to/built-in-components)
+1. In the Makeswift builder, create a new page with the path `/blog`
+2. The page will automatically display your blog posts using the `BlogPostList` component from VIBES
+3. Posts are automatically fetched from Contentful and formatted for display
 
-## Add Visually Editable CTA Section
+### Individual Blog Post Pages (`/blog/[slug]`)
 
-So far, we're not taking advantage of any Makeswift features. We've simply integrated Contentful into a regular Next.js project and viewed the pages inside of Makeswift. Next, you'll update the blog post content page to display a section at the bottom of the post that can be edited in Makeswift. This will allow a user to visually add anything they'd like. For example a CTA, newsletter form, etc.
+This integration uses a unique **BlogContentWithSlot** pattern that allows you to:
 
-> The final code for this section can be found in `/blog/with-slot/[slug]/page.tsx`
+1. **Automatically generate pages** for each blog post based on the slug
+2. **Display blog content** (title, date, content, etc.) from Contentful
+3. **Add custom sections** visually in Makeswift below the blog content
 
-For enabling components to be editable in Makeswift, you'll first need a regular React component. Then, you'll need to register that component with Makeswift. You can then use Makeswift controls to define properties that are visually editable by the user and then passed to the React component. These two files (the React component and registration file) are already included for you.
+#### Unique Component Snapshots
 
-- `/components/BlogContentWithSlot/index.tsx`
-- `/components/BlogContentWithSlot/BlogContentWithSlot.makeswift.tsx.tsx`
+With this implementation, each blog post gets its own **unique component snapshot** in Makeswift using the pattern `blog-content-with-slot-${slug}`. This means:
 
-In the React component, you can see it's primary job is to render the blog post content as we've already been doing. In this case, it's accessing the blog post using the `useContentfulData` hook. This hook depends on the `<ContentfulProvider>` component which we'll add in a minute.
+- A blog post with slug `"my-first-post"` gets snapshot ID `"blog-content-with-slot-my-first-post"`
+- A blog post with slug `"getting-started"` gets snapshot ID `"blog-content-with-slot-getting-started"`
+- Each blog post has their own instance of registered controls thus allowing for each page to have their own information. In this case, we are registering an additional slot.
 
-```tsx
-const { data: blogs } = useContentfulData()
-```
+To further add to a blog post:
 
-For the most part, the rest of this component looks exactly like what we had before where format the blog post, define breadcrumbs, and then pass those two props to the `<BlogPostContent>` component.
+1. In Makeswift, navigate to any blog post URL (e.g., `/blog/your-post-slug`), or create a page with a matching path.
+2. The first time you visit, you'll see the blog content with an empty slot below
+3. Drag components from the Makeswift toolbar into the slot area
+4. Your custom layout will be saved and applied **only to this specific blog post**
+5. Other blog posts with different slugs will have their own independent layouts
 
-The one additional thing you'll see is that this component also accepts a `children` prop of type `React.ReactNode`. This is the prop that represents the content the user can add at the end of the blog post content.
+## Key Integration Components
 
-In the `BlogContentWithSlot.makeswift.tsx.tsx` we can see how this works. Here, the component is registered with Makeswift. Inside of the `props` property, there is a property called `children` whose value is the [`Slot`](https://docs.makeswift.com/developer/reference/controls/slot) control from Makeswift. The Slot control basically enables a defined box that any type of content can be added to.
+### Dynamic Page Generation with Unique Snapshots
 
-Often, the components that are registered with Makeswift are meant to be visually dragged and dropped from the Component Tray inside of Makeswift. However, in this case, we want to explicity render this component in our code. To do this, we need to use the [`<MakeswiftComponent>`](https://docs.makeswift.com/developer/reference/components/makeswift-component) API.
+This critical logic can be found in `app/blog/[slug]/page.tsx`:
 
-First, you need to get a "snapshot" of the component you want to do be rendered by calling `MakeswiftClient.getComponentSnapshot`. To this function you need to pass an id for the snapshot. In this case, use `'blog-content-with-slot'`. The second argument you need to pass is a configuration object that defines the `siteVersion`. The result looks like this.
-
-```tsx
-const componentSnapshot = await MakeswiftClient.getComponentSnapshot(`blog-content-with-slot`, {
-  siteVersion: await getSiteVersion(),
-})
-```
-
-Then, you'll need to render the snapshot using the `<MakeswiftComponent>` component. You'll pass the snapshot you just retrieved as well as a label. Lastly, you'll need to pass the `type` property which basically represents the unique identifier of the registered component to render. The `type` you will use is `BLOG_CONTENT_WITH_SLOT_TYPE` which is already imported. To render this component, it will look like this.
-
-```tsx
-<MakeswiftComponent
-  snapshot={componentSnapshot}
-  label="Blog Content with Slot"
-  type={BLOG_CONTENT_WITH_SLOT_TYPE}
-/>
-```
-
-Lastly, you'll need to wrap return value with the `<ContentfulProvider>` component like so:
-
-```tsx
-  return (
-    <ContentfulProvider value={blogData.blogPostCollection?.items}>
-      <MakeswiftComponent
-        snapshot={componentSnapshot}
-        label="Blog Content with Slot"
-        type={BLOG_CONTENT_WITH_SLOT_TYPE}
-      />
-    </ContentfulProvider>
-  )
-```
-
-The final result of this page looks like this:
-
-```tsx
-import { notFound } from 'next/navigation'
-
-import { MakeswiftComponent } from '@makeswift/runtime/next'
-import { getSiteVersion } from '@makeswift/runtime/next/server'
-
-import { BLOG_CONTENT_WITH_SLOT_TYPE } from '@/components/BlogContentWithSlot/BlogContentWithSlot.makeswift'
-import { GetBlogsDocument } from '@/generated/contentful'
-import { client } from '@/lib/contentful/client'
-import { getAllBlogs, getBlog } from '@/lib/contentful/fetchers'
-import { ContentfulProvider } from '@/lib/contentful/provider'
-import { client as MakeswiftClient } from '@/lib/makeswift/client'
-
-export async function generateStaticParams() {
-  const blogs = await getAllBlogs()
-  return blogs.map(blog => ({ slug: blog?.slug }))
-}
-
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  if (!slug) {
-    return notFound()
-  }
-
-  const componentSnapshot = await MakeswiftClient.getComponentSnapshot(
-    `blog-content-with-slot-${slug}`,
-    {
-      siteVersion: await getSiteVersion(),
-    }
-  )
-
-  if (componentSnapshot == null) return notFound()
-
-  const blogData = await client.request(GetBlogsDocument, {
-    filter: { slug },
-  })
-
-  if (!blogData.blogPostCollection) return notFound()
-
-  return (
-    <ContentfulProvider value={blogData.blogPostCollection?.items}>
-      <MakeswiftComponent
-        snapshot={componentSnapshot}
-        label="Blog Content with Slot"
-        type={BLOG_CONTENT_WITH_SLOT_TYPE}
-      />
-    </ContentfulProvider>
-  )
-}
-```
-
-If you refresh the page in Makeswift and scroll to the bottom, you should see a gray box which represents the editable region.
-
-![Blog post content with slot](/images/blog-post-content-with-slot.jpeg)
-
-You can add anything you want. In this case, I'm going to add a text element and an instance of the **Email Form** component from the component tray. Here's what that looks like.
-
-![Blog post content with email sign up CTA](/images/blog-post-content-with-email-cta.jpeg)
-
-## Add Visually Editable CTA Section That is Different Per Page
-
-What's really interesting about this CTA section is that it's going to show up the exact same on each individual blog post page. This is because the `id` that we defined when calling `getComponentSnapshot` is the same across each page. This means making a change to this section would affect all other blog post pages. This is nice if this is what you want, but you might also want the ability to customize the CTA for each blog post page.
-
-To make the CTA section cutomizable for each page, you can simply pass a unique `id` to `getComponentSnapshot` for each different blog post page. You can do this by using string interpolation to add the `slug` of the give page to the `id` like so:
-
-```tsx
+```25:35:app/blog/[slug]/page.tsx
 const componentSnapshot = await MakeswiftClient.getComponentSnapshot(
-  `blog-content-with-slot-${slug}`,
+  `blog-content-with-slot-${slug}`, // Allows for unique versions of this component
   {
     siteVersion: await getSiteVersion(),
   }
 )
 ```
 
-Now, each component snapshot is going to be specific to the individual page it is referenced in.
+This code demonstrates how:
 
-## Make the Blog Content Page Fully Editable in Makeswift
+- The `slug` parameter from the URL is used to create a unique snapshot identifier
+- Each blog post gets its own saved layout in Makeswift (`blog-content-with-slot-${slug}`)
+- Content is fetched from Contentful based on the same slug
+- The combination creates unique, editable pages for each blog post
 
-So far, you've learned how to integrate Contentful into Next.js while making certain parts of a page editable in Makeswift. That works for most use cases, but there is another interesting use case. What if you wanted to visually customize the template of a blog post page from within Makeswift instead of in code? This would give you the ability to visually define the layout for blog post content and apply it to each blog post page.
+### BlogContentWithSlot
 
-Since you're integrating with Contentful for blog post data, you would need to have individual components for each property to visually layout your blog post content template. For a given blog post, we have different properties we want to display: title, author, body content, etc. These properties match to a few different model types in contentful: text, media, and rich text.
+The main component that powers the blog post pages:
 
-To solve this, you could create components specifically for each blog post property. However, what if you wanted something more general? Instead of a `ContentfulBlogPostTitle` component, what if you had components like `ContentfulText`, `ContentfulRichText`, `ContentfulImage` that could be connected to your individual fields, regardless of what their name is. Well, we've included a set of components like that under `/components/Contentful/common`.
+`components/BlogContentWithSlot/index.tsx`
 
-To visually build your blog template, update the code in `/app/blog/page.tsx` to the following. This new code will:
+## Development Guide
 
-```tsx
-import { notFound } from 'next/navigation'
+### Environment Configuration
 
-import { MakeswiftComponent } from '@makeswift/runtime/next'
-import { getSiteVersion } from '@makeswift/runtime/next/server'
+Environment variables are validated using `@t3-oss/env-nextjs`:
 
-import { BLOG_POST_EMBEDDED_COMPONENT_ID } from '@/components/BlogPostCustomizable/BlogPost.makeswift'
-import { GetBlogsDocument } from '@/generated/contentful'
-import { client } from '@/lib/contentful/client'
-import { getAllBlogs } from '@/lib/contentful/fetchers'
-import { ContentfulProvider } from '@/lib/contentful/provider'
-import { client as MakeswiftClient } from '@/lib/makeswift/client'
-
-export async function generateStaticParams() {
-  const blogs = await getAllBlogs()
-  return blogs.map(blog => ({ slug: blog?.slug }))
-}
-
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  if (!slug) {
-    return notFound()
-  }
-
-  const componentSnapshot = await MakeswiftClient.getComponentSnapshot(
-    'blog-content-customizable',
-    {
-      siteVersion: await getSiteVersion(),
-    }
-  )
-
-  if (componentSnapshot == null) return notFound()
-
-  const { blogPostCollection } = await client.request(GetBlogsDocument, {
-    filter: { slug },
-  })
-
-  if (!blogPostCollection) return notFound()
-
-  return (
-    <ContentfulProvider value={blogPostCollection}>
-      <MakeswiftComponent
-        snapshot={componentSnapshot}
-        label="Blog Post Customizable"
-        type={BLOG_POST_EMBEDDED_COMPONENT_ID}
-      />
-    </ContentfulProvider>
-  )
-}
+```4:15:env.ts
+export const env = createEnv({
+  server: {
+    MAKESWIFT_SITE_API_KEY: z.string().min(1),
+    CONTENTFUL_ACCESS_TOKEN: z.string().min(1),
+    CONTENTFUL_SPACE_ID: z.string().min(1),
+  },
+  runtimeEnv: {
+    MAKESWIFT_SITE_API_KEY: process.env.MAKESWIFT_SITE_API_KEY,
+    CONTENTFUL_ACCESS_TOKEN: process.env.CONTENTFUL_ACCESS_TOKEN,
+    CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID,
+  },
+})
 ```
 
-This main change here is that you are referencing a different component snapshot and `<MakeswiftComponent>`. Notice that the `id` for the snapshot is not unique per page. That's because we want this template to be used on each blog page.
+### GraphQL Code Generation
 
-Back in Makeswift, you should see your page is now empty with a slot to put whatever you want inside. From the Component Tray, you can drag instances of the those components from the `Contentful -> Blog` group of components. For each Contentful copmonent, you'll need to connect it to a specific property from your data. You can set this in the **Field** property in the properties sidebar. After you've successfully connected to the correct data field, you can customize your blog layout as you'd like.
+Types are automatically generated from your Contentful schema. The configuration is in `graphql.config.ts` and types are output to `generated/contentful.ts`.
+
+### VIBES Components
+
+This project uses pre-built components from [VIBES](https://vibes.site/) for consistent, modern UI. See the [vibes folder](/vibes/README.md) for more details.
+
+- **BlogPostList**: Displays a grid of blog post cards
+- **BlogPostContent**: Shows individual blog post content with breadcrumbs
+- **SectionLayout**: Provides consistent spacing and layout
+
+### Content Formatting
+
+Blog posts are transformed from Contentful's format to match VIBES component expectations:
+
+`lib/contentful/utils.ts`
+
+## Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm codegen-ts` - Generate TypeScript types from Contentful schema (with watch mode)
+
+## Troubleshooting
+
+Common issues and solutions:
+
+- **Type generation fails**
+  - Ensure Contentful credentials are correct in `.env.local`
+  - Check that your content model matches the GraphQL query
+  - Verify content is published in Contentful
+
+- **Blog posts not showing**
+  - Verify the slug format matches your Contentful entries
+  - Check if posts are published in Contentful
+  - Ensure required fields (title, slug, feedDate, body, banner) are populated
+
+- **Makeswift builder issues**
+  - Clear browser cache and refresh
+  - Ensure `MAKESWIFT_SITE_API_KEY` is correctly set
+  - Verify your host URL is set to `http://localhost:3000/` in Makeswift settings
+
+- **GraphQL errors**
+  - Run `pnpm codegen-ts` to regenerate types
+  - Check that your content model structure matches the GraphQL query
+  - Ensure all referenced content types (Author, BlogPost) exist and are published
+
+## Learn More
+
+- [Makeswift Documentation](https://www.makeswift.com/docs/)
+- [Makeswift Runtime GitHub repository](https://github.com/makeswift/makeswift)
+- [Contentful GraphQL API Reference](https://www.contentful.com/developers/docs/references/graphql/)
+- [VIBES Component Library](https://vibes.site/)
+- [Next.js App Router Documentation](https://nextjs.org/docs/app)
