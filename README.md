@@ -1,12 +1,8 @@
 # Makeswift Contentful Workshop
 
+![QR Code](/images//qrcode.jpg)
+
 Learn how to integrate [Contentful](https://www.contentful.com/) into a Next.js site that is editable inside of [Makeswift](https://makeswift.com/).
-
-## Things to Know
-
-- Makeswift is [HIRING](https://www.makeswift.com/careers)!
-- Makeswift booth in the exhibition hall on the right-hand side. Come talk to us!
-- [AI Happy Hour (tonight from 5-8)](https://atlanta.aitinkerers.org/p/happy-hour-with-ai-tinkerers-and-okta)
 
 ## Prerequisites
 
