@@ -39,7 +39,7 @@ export function BlogPostFeed({ className, itemsPerPage = 3 }: Props) {
 
   return (
     <div className={clsx(className, '@container space-y-12')}>
-      <div className="grid grid-cols-1 gap-8 @sm:grid-cols-2 @xl:grid-cols-3">
+      <div className="@sm:grid-cols-2 @xl:grid-cols-3 grid grid-cols-1 gap-8">
         {blogPosts.map(post => (
           <Link
             key={post?._id}
@@ -66,9 +66,9 @@ export function BlogPostFeed({ className, itemsPerPage = 3 }: Props) {
                 <p className="line-clamp-3 text-gray-600">{post?.description}</p>
               </div>
               <div className="mt-4 flex items-center text-sm text-gray-500">
-                {post?.publishDate && (
-                  <time dateTime={post.publishDate}>
-                    {new Date(post.publishDate).toLocaleDateString('en-US', {
+                {post?.feedDate && (
+                  <time dateTime={post.feedDate}>
+                    {new Date(post.feedDate).toLocaleDateString('en-US', {
                       month: 'long',
                       day: 'numeric',
                       year: 'numeric',

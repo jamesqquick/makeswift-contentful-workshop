@@ -34,21 +34,27 @@ Contentful is a Headless CMS that allows you to define structured data to be use
 
 ## Create Data Model in Contentful
 
-Create a new data model in Contentful by going to the **Content Model** tab and choosing **Start from Scratch**. Then, name it `BlogPost` and include the following properties. Each property marked with "\*" should be flagged as required.
+Create a new data model in Contentful by going to the **Content Model** tab and choosing **Start from Scratch**. Then, name it `Author` and include the following properties. Each property marked with "\*" should be flagged as required.
+
+- **name\*** - Short Text
+- **avatar** - Media
+- **jobTitle\*** - Short Text
+- **description\*** - Rich Text
+- **slug\*** - Short Text
+
+Then, create a new data model called `BlogPost` with the following properties:
 
 - **slug\*** - Short Text
 - **title\*** - Short Text
 - **description\*** - Short Text
 - **body\*** - Rich text
 - **banner** - Media
-- **publishDate\*** - Date and Time
-- **author\*** - Short text
+- **author\*** - Reference (to Author type)
+- **feedDate\*** - Date and Time
 
-It's important that the names and types match exactly what is listed here. It should look like this.
+\*When creating a new field, there is an option for `Name` and `Field ID`. The `Name` is arbitrary, meaning you can call this whatever you want. However, it's important that the `Field ID` property matches exactly what is listed here. Otherwise your GraphQL queries and type generation will fail.
 
-![Blog Post content model](/images/blog-post-content-model.png)
-
-Now, add a sample `BlogPost`.
+Now, create a sample `Author`. Then, create a sample `BlogPost`. You can use the following data. Make sure to also include a `feedDate` and connect the `author` property to the author you just created.
 
 ```tsx
 {
@@ -56,7 +62,6 @@ Now, add a sample `BlogPost`.
 	title: `Top 5 Plants to Purify Your Home's Air`,
 	description: `The Snake Plant, also known as Mother-in-Law's Tongue, is one of the most effective plants for filtering out several toxins.`,
 	content: `The Snake Plant, also known as Mother-in-Law's Tongue, is one of the most effective plants for filtering out several toxins. It thrives in low light, making it perfect for bedrooms and living rooms.`
-	author: `Sam Smith`
 }
 ```
 

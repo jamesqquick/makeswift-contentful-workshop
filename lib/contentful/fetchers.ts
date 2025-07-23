@@ -10,7 +10,7 @@ export type QueriedBlogPost = {
   slug: string
   title: string
   description: string
-  publishDate: string
+  feedDate: string
   author: string
   body: {
     __typename?: 'BlogPostBody'
@@ -39,7 +39,7 @@ export async function getAllBlogs(): Promise<QueriedBlogPost[]> {
     const { blogPostCollection } = await client.request(GetBlogsDocument, {
       limit: PAGINATION_LIMIT,
       skip,
-      order: [BlogPostOrder.PublishDateDesc],
+      order: [BlogPostOrder.FeedDateDesc],
     })
 
     const items = blogPostCollection?.items ?? []

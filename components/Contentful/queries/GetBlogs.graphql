@@ -1,3 +1,21 @@
+fragment AuthorInfo on Author {
+  name
+  avatar {
+    __typename
+    title
+    description
+    contentType
+    fileName
+    url
+    width
+    height
+  }
+  jobTitle
+  description {
+    json
+  }
+}
+
 query GetBlogs(
   $limit: Int! = 8
   $skip: Int! = 0
@@ -25,8 +43,10 @@ query GetBlogs(
         width
         height
       }
-      publishDate
-      author
+      feedDate
+      author {
+        ...AuthorInfo
+      }
     }
   }
 }
